@@ -8,23 +8,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "categoria")
 public class Categoria {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "codigo")
 	private Long codigo;
-	
+
 	@Column(name = "nome")
-	@NotBlank(message = "Nome")
-	@Length(min = 3, max = 50, message = "Nome")
 	private String nome;
+
+	public Categoria() {
+	}
+
+	public Categoria(String nome) {
+		this.nome = nome;
+	}
+
+	public Categoria(Long codigo, String nome) {
+		this.codigo = codigo;
+		this.nome = nome;
+	}
 
 	public Long getCodigo() {
 		return codigo;
