@@ -62,8 +62,9 @@ public class CategoriaControlador {
 	// Exemplo de chamada: localhost:8080/categoria/1
 	@ApiOperation(value = "Atualizar", nickname = "atualizarCategoria")
 	@PutMapping("/{codigo}")
-	public ResponseEntity<Categoria> atualizar(@PathVariable Long codigo, @Valid @RequestBody CategoriaRequestDTO categoriaDto) {
-		return ResponseEntity.ok(categoriaServico.atualizar(codigo, categoriaDto.converterParaEntidade(codigo)));
+	public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long codigo, @Valid @RequestBody CategoriaRequestDTO categoriaDto) {
+		Categoria categoriaAtualizada = categoriaServico.atualizar(codigo, categoriaDto.converterParaEntidade(codigo));
+		return ResponseEntity.ok(CategoriaResponseDTO.converteParaCategoriaDTO(categoriaAtualizada));
 	}
 
 	@ApiOperation(value = "Deletar", nickname = "deleteCategoria")
