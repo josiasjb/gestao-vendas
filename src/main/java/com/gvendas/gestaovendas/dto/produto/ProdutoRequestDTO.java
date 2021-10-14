@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel("Produto requisição DTO")
-public class ProdutoRequestDto {
+public class ProdutoRequestDTO {
 
 	@ApiModelProperty(value = "Descrição")
 	@NotBlank(message = "Descrição")
