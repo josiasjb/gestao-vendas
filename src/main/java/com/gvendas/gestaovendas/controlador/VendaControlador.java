@@ -1,4 +1,4 @@
-package com.gvendas.gestaovendas.controlador.util;
+package com.gvendas.gestaovendas.controlador;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
