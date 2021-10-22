@@ -19,7 +19,7 @@ import com.gvendas.gestaovendas.repositorio.ItemVendaRepositorio;
 import com.gvendas.gestaovendas.repositorio.VendaRepositorio;
 
 @Service
-public class VendaServico {
+public class VendaServico extends AbstractVendaServico {
 
 	private VendaRepositorio vendaRepositorio;
 	private ItemVendaRepositorio itemVendaRepositorio;
@@ -36,13 +36,16 @@ public class VendaServico {
 	public ClienteVendaResponseDTO listaVendaPorCliente(Long codigoCliente) {
 		Cliente cliente = validarClienteVendaExiste(codigoCliente);
 		List<VendaResponseDTO> vendaResponseDtoList = vendaRepositorio.findByClienteCodigo(codigoCliente).stream()
-				.map(this::criandoVendaResponseDTO).collect(Collectors.toList());
+				.map(venda -> criandoVendaResponseDTO(venda, itemVendaRepositorio.findByVendaCodigo(venda.getCodigo())))
+				.collect(Collectors.toList());
 		return new ClienteVendaResponseDTO(cliente.getNome(), vendaResponseDtoList);
 	}
 
 	public ClienteVendaResponseDTO listarVendaPorCodigo(Long codigoVenda) {
 		Venda venda = validarVendaExiste(codigoVenda);
-		return new ClienteVendaResponseDTO(venda.getCliente().getNome(), Arrays.asList(criandoVendaResponseDTO(venda)));
+		List<ItemVenda> itensVendaList = itemVendaRepositorio.findByVendaCodigo(venda.getCodigo());
+		return new ClienteVendaResponseDTO(venda.getCliente().getNome(),
+				Arrays.asList(criandoVendaResponseDTO(venda, itensVendaList)));
 	}
 
 	private Venda validarVendaExiste(Long codigoVenda) {
@@ -62,14 +65,4 @@ public class VendaServico {
 		return cliente.get();
 	}
 
-	private VendaResponseDTO criandoVendaResponseDTO(Venda venda) {
-		List<ItemVendaResponseDTO> itensVendaResponseDto = itemVendaRepositorio.findByVendaCodigo(venda.getCodigo())
-				.stream().map(this::criandoItensVendaResponseDto).collect(Collectors.toList());
-		return new VendaResponseDTO(venda.getCodigo(), venda.getData(), itensVendaResponseDto);
-	}
-
-	private ItemVendaResponseDTO criandoItensVendaResponseDto(ItemVenda itemVenda) {
-		return new ItemVendaResponseDTO(itemVenda.getCodigo(), itemVenda.getQuantidade(), itemVenda.getPrecoVenda(),
-				itemVenda.getProduto().getCodigo(), itemVenda.getProduto().getDescricao());
-	}
 }
