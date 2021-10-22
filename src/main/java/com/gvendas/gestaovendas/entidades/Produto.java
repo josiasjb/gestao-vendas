@@ -15,34 +15,38 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "produto")
 public class Produto {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "codigo")
 	private Long codigo;
-	
+
 	@Column(name = "descricao")
 	private String descricao;
 
 	@Column(name = "quantidade")
 	private Integer quantidade;
-	
+
 	@Column(name = "preco_curto")
 	private BigDecimal precoCusto;
-	
+
 	@Column(name = "preco_venda")
 	private BigDecimal precoVenda;
-	
+
 	@Column(name = "observacao")
 	private String observacao;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria", referencedColumnName = "codigo")
 	private Categoria categoria;
-	
+
 	public Produto() {
 	}
-	
+
+	public Produto(Long codigo) {
+		this.codigo = codigo;
+	}
+
 	public Produto(Long codigo, String descricao, Integer quantidade, BigDecimal precoCusto, BigDecimal precoVenda,
 			String observacao, Categoria categoria) {
 		this.codigo = codigo;
@@ -53,7 +57,7 @@ public class Produto {
 		this.observacao = observacao;
 		this.categoria = categoria;
 	}
-	
+
 	public Produto(String descricao, Integer quantidade, BigDecimal precoCusto, BigDecimal precoVenda,
 			String observacao, Categoria categoria) {
 		this.descricao = descricao;
@@ -140,5 +144,4 @@ public class Produto {
 				&& Objects.equals(quantidade, other.quantidade);
 	}
 
-	
 }
