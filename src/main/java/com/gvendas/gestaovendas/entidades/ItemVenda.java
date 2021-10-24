@@ -34,10 +34,18 @@ public class ItemVenda {
 	@ManyToOne
 	@JoinColumn(name = "codigo_venda", referencedColumnName = "codigo")
 	private Venda venda;
-	
+
 	public ItemVenda() {
 	}
-	
+
+	public ItemVenda(Long codigo, Integer quantidade, BigDecimal precoVenda, Produto produto, Venda venda) {
+		this.codigo = codigo;
+		this.quantidade = quantidade;
+		this.precoVenda = precoVenda;
+		this.produto = produto;
+		this.venda = venda;
+	}
+
 	public ItemVenda(Integer quantidade, BigDecimal precoVenda, Produto produto, Venda venda) {
 		this.quantidade = quantidade;
 		this.precoVenda = precoVenda;
