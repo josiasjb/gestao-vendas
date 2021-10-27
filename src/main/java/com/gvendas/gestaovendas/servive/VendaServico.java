@@ -14,7 +14,6 @@ import com.gvendas.gestaovendas.dto.venda.VendaRequestDTO;
 import com.gvendas.gestaovendas.dto.venda.VendaResponseDTO;
 import com.gvendas.gestaovendas.entidades.Cliente;
 import com.gvendas.gestaovendas.entidades.ItemVenda;
-import com.gvendas.gestaovendas.entidades.Produto;
 import com.gvendas.gestaovendas.entidades.Venda;
 import com.gvendas.gestaovendas.execao.RegraNegocioException;
 import com.gvendas.gestaovendas.repositorio.ItemVendaRepositorio;
@@ -39,8 +38,8 @@ public class VendaServico extends AbstractVendaServico {
 
 	public ClienteVendaResponseDTO listaVendaPorCliente(Long codigoCliente) {
 		Cliente cliente = validarClienteVendaExiste(codigoCliente);
-		List<VendaResponseDTO> vendaResponseDtoList = vendaRepositorio.findByClienteCodigo(codigoCliente).stream()
-				.map(venda -> criandoVendaResponseDTO(venda, itemVendaRepositorio.findByVendaPorCodigo(venda.getCodigo())))
+		List<VendaResponseDTO> vendaResponseDtoList = vendaRepositorio.findByClienteCodigo(codigoCliente).stream().map(
+				venda -> criandoVendaResponseDTO(venda, itemVendaRepositorio.findByVendaPorCodigo(venda.getCodigo())))
 				.collect(Collectors.toList());
 		return new ClienteVendaResponseDTO(cliente.getNome(), vendaResponseDtoList);
 	}
@@ -56,8 +55,8 @@ public class VendaServico extends AbstractVendaServico {
 		Cliente cliente = validarClienteVendaExiste(codigoCliente);
 		validarProdutoExiste(vendaDto.getItensVendaDto());
 		Venda vendaSalva = salvarVenda(cliente, vendaDto);
-		return new ClienteVendaResponseDTO(vendaSalva.getCliente().getNome(), Arrays.asList(
-				criandoVendaResponseDTO(vendaSalva, itemVendaRepositorio.findByVendaPorCodigo(vendaSalva.getCodigo()))));
+		return retornoClienteVendaResponseDTO(vendaSalva,
+				itemVendaRepositorio.findByVendaPorCodigo(vendaSalva.getCodigo()));
 	}
 
 	private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaDto) {
@@ -87,11 +86,6 @@ public class VendaServico extends AbstractVendaServico {
 					String.format("O Cliente de código %s informado não existe no cadastro.", codigoCliente));
 		}
 		return cliente.get();
-	}
-
-	private ItemVenda criandoItemVenda(ItemVendaRequestDTO itemVendaDto, Venda venda) {
-		return new ItemVenda(itemVendaDto.getQuantidade(), itemVendaDto.getPrecoVenda(),
-				new Produto(itemVendaDto.getCodigoProduto()), venda);
 	}
 
 }
